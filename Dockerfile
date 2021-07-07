@@ -33,4 +33,7 @@ RUN pip3 install --no-cache-dir -U pip \
     && MULTIDICT_NO_EXTENSIONS=1 YARL_NO_EXTENSIONS=1 \
            pip3 install --no-cache-dir -U neuro-cli neuro-flow neuro-extras awscli
 
+RUN mkdir -p /root/.ssh
+COPY files/ssh/known_hosts /root/.ssh/known_hosts 
+
 VOLUME ["/root/.config"]
