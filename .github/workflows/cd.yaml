@@ -1,0 +1,37 @@
+name: Deploy Image
+
+on:
+  pull_request:
+  release:
+    types: [published]
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build and publish image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v2
+      - name: Parse tag
+        id: parse_tag
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/tags/v}
+      - name: Login to Artifactory docker registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.ARTIFACTORY_DOCKER_REPO }}
+          username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push to registry
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_REPO: neuromation/minimal-base
+        with:
+          push: true
+          tags: |
+            ${{ env.IMAGE_REPO }}:${{ steps.parse_tag.outputs.tag }}
+            ${{ env.IMAGE_REPO }}:latest
