@@ -11,24 +11,25 @@ ENV PATH /google-cloud-sdk/bin:$PATH
 WORKDIR /
 
 RUN apk add --no-cache make curl git rsync unrar zip unzip vim wget htop openssh-client ca-certificates bash
-# Google Cloud SDK
-RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+
+# Install Google Cloud SDK
+RUN wget -q https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
     tar xzf google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
     rm google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
     ln -s /lib /lib64 && \
     gcloud config set core/disable_usage_reporting true && \
     gcloud --version
-# RClone
+
+# Install rclone
 RUN curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
     unzip rclone-current-linux-amd64.zip && \
     cd rclone-*-linux-amd64 && \
     cp rclone /usr/bin/ && \
     chmod 755 /usr/bin/rclone
 
+# Install neuro CLI tools
 RUN pip3 install --no-cache-dir -U pip \
     && MULTIDICT_NO_EXTENSIONS=1 YARL_NO_EXTENSIONS=1 \
            pip3 install --no-cache-dir -U neuro-cli neuro-flow neuro-extras awscli
 
 VOLUME ["/root/.config"]
-
-
