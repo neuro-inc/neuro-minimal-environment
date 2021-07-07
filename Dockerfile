@@ -23,8 +23,9 @@ RUN wget -q https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 # Install rclone
 RUN curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
     unzip rclone-current-linux-amd64.zip && \
-    cd rclone-*-linux-amd64 && \
-    cp rclone /usr/bin/ && \
+    rm rclone-current-linux-amd64.zip && \
+    cp rclone-*-linux-amd64/rclone /usr/bin/ && \
+    rm -rf rclone-*-linux-amd64 && \
     chmod 755 /usr/bin/rclone
 
 # Install neuro CLI tools
