@@ -1,4 +1,4 @@
-FROM woahbase/alpine-python3:x86_64
+FROM python:3.7.11-alpine3.13
 
 ENV LANG C.UTF-8
 ENV PYTHONUNBUFFERED 1
@@ -31,7 +31,7 @@ RUN curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
 # Install neuro CLI tools
 RUN pip3 install --no-cache-dir -U pip \
     && MULTIDICT_NO_EXTENSIONS=1 YARL_NO_EXTENSIONS=1 \
-           pip3 install --no-cache-dir -U neuro-cli neuro-flow neuro-extras awscli
+           pip3 install --no-cache-dir -U neuro-cli==21.7.9 neuro-flow==21.7.9 neuro-extras==21.7.2 awscli==1.19.109
 
 RUN mkdir -p /root/.ssh
 COPY files/ssh/known_hosts /root/.ssh/known_hosts 
